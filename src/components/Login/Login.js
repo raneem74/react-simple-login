@@ -1,5 +1,6 @@
 import React, { useState, useReducer } from 'react';
-
+import { useContext } from 'react';
+import { AuthContext } from '../../stores/auth-context';
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
@@ -10,9 +11,10 @@ const reducer = (prevState, action) => {
   return { value: action.value, isValid: action.value.includes('@') }
 }
 
-const Login = (props) => {
+const Login = () => {
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
+  const ctx = useContext(AuthContext);
   const [emailState, emailDispatcher] = useReducer(reducer, { value: '', isValid: null })
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
@@ -47,7 +49,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, enteredPassword);
+    ctx.onLogin(emailState.value, enteredPassword);
   };
 
   return (

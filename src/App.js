@@ -19,7 +19,9 @@ function App() {
   };
 
   return (
-    <AuthContext.Provider>
+    <AuthContext.Provider value={{
+      isLoggedIn: isLoggedIn
+    }}>
       <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}

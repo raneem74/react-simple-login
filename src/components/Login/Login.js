@@ -1,9 +1,10 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useRef } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../../stores/auth-context';
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import Label from '../UI/Label/Label';
 
 const reducer = (prevState, action) => {
 
@@ -19,6 +20,9 @@ const Login = () => {
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+
+  const emailRef = useRef();
+  const passRef = useRef();
 
   const emailHandler = (event) => {
     // setEnteredEmail(event.target.value);
@@ -49,7 +53,15 @@ const Login = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    ctx.onLogin(emailState.value, enteredPassword);
+    if (formIsValid) {
+      ctx.onLogin(emailState.value, enteredPassword);
+    }
+    else if (!emailState.isValid) {
+      emailRef.current.focus();
+    }
+    else {
+      passRef.current.focus();
+    }
   };
 
   return (
@@ -60,7 +72,8 @@ const Login = () => {
             }`}
         >
           <label htmlFor="email">E-Mail</label>
-          <input
+          <Label
+            ref={emailRef}
             type="email"
             id="email"
             value={emailState.value}
@@ -73,16 +86,17 @@ const Login = () => {
             }`}
         >
           <label htmlFor="password">Password</label>
-          <input
+          <Label
+            ref={passRef}
             type="password"
             id="password"
             value={enteredPassword}
             onChange={passwordChangeHandler}
-          // onBlur={validatePasswordHandler}
+            onBlur={validatePasswordHandler}
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button type="submit" className={classes.btn} >
             Login
           </Button>
         </div>
